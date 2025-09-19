@@ -1,18 +1,28 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class PlayerStateNormal : MonoBehaviour
+public class PlayerStateNormal : PlayerStateBase
 {
-    // Start is called before the first frame update
-    void Start()
+    public PlayerStateNormal(PlayerStateMachine stateMachine) : base(stateMachine, PlayerStateIds.Normal)
+    {
+    }
+
+    public override void CheckSwitchState()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void EnterState()
     {
         
+    }
+
+    public override void ExitState()
+    {
+        
+    }
+
+    public override void UpdateState()
+    {
+        _sm.MoveVector = _sm.MoveSpeed * Time.deltaTime * _sm.InputMove.normalized;
     }
 }

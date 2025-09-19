@@ -25,6 +25,7 @@ public class InputManagerSO : ScriptableObject, GameInput.IGameplayActions
             _gameInput = new GameInput();
 
             _gameInput.Gameplay.SetCallbacks(this);
+            _gameInput.Gameplay.Enable();
         }
     }
 

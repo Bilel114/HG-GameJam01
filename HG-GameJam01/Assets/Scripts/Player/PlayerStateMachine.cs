@@ -18,9 +18,17 @@ public class PlayerStateMachine : MonoBehaviour
     [SerializeField] private PlayerStateIds _currentStateId;
     public PlayerStateIds CurrentStateId { get => _currentStateId; }
 
+    private CharacterController2D _charController;
+
     // analog movement input values
     private Vector2 _normalizedInput;
     private const float _ANALOG_ANGLE_SIN_COS = 0.3826f;
+
+    // movement fields
+    private Vector2 _moveVector;
+    public Vector2 MoveVector { get => _moveVector; set => _moveVector = value; }
+    [SerializeField] private float _moveSpeed = 2;
+    public float MoveSpeed { get => _moveSpeed; }
 
     #region Input fields
     // input fields
@@ -51,7 +59,9 @@ public class PlayerStateMachine : MonoBehaviour
 
     private void Awake()
     {
+        Application.targetFrameRate = 60; // TODO move to game manager
         _thisInstanceAsArray[0] = this;
+        _charController = GetComponent<CharacterController2D>();
 
         _currentState = GetState(PlayerStateIds.Normal);
         _currentStateId = PlayerStateIds.Normal;
@@ -101,7 +111,7 @@ public class PlayerStateMachine : MonoBehaviour
 
     private void MoveCharacter ()
     {
-
+        _charController.Move(_moveVector);
     }
 
     #region Input Methods
@@ -111,6 +121,11 @@ public class PlayerStateMachine : MonoBehaviour
         _inputManager.MoveAnalogEvent += OnInputMoveAnalog;
         _inputManager.InteractEvent += OnInputInteractPressed;
         _inputManager.InteractCancelledEvent += OnInputInteractReleased;
+        _inputManager.DodgeEvent += OnInputDodgePressed;
+        _inputManager.DodgeCancelledEvent += OnInputDodgeReleased;
+        _inputManager.ShieldEvent += OnInputShieldPressed;
+        _inputManager.ShieldCancelledEvent += OnInputShieldReleased;
+        _inputManager.PauseEvent += OnInputPausePressed;
     }
 
     private void ReleaseInput()
