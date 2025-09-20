@@ -320,9 +320,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currentStateId: 0
-  _moveSpeed: 2
+  _moveSpeed: 3
+  _dodgeDuration: 0.4
+  _dodgeSpeed: 5
+  _dodgeCooldownDuration: 1.4
   _inputManager: {fileID: 11400000, guid: 89d5b8e72c58c32429ec24d10d584595, type: 2}
   Debug_TimeScale: 1
+  Debug_AutoMoveVector: {x: 0, y: 0}
 --- !u!212 &1416522590
 SpriteRenderer:
   m_ObjectHideFlags: 0

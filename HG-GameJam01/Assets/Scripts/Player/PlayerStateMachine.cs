@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public enum PlayerStateIds { Normal, }
+public enum PlayerStateIds { Normal, Dodge, }
 
 public class PlayerStateMachine : MonoBehaviour
 {
@@ -11,6 +11,7 @@ public class PlayerStateMachine : MonoBehaviour
     private readonly Dictionary<PlayerStateIds, System.Type> _playerStateTypes = new Dictionary<PlayerStateIds, System.Type>()
     {
         {PlayerStateIds.Normal, typeof(PlayerStateNormal) },
+        {PlayerStateIds.Dodge, typeof(PlayerStateDodge) },
     };
     private readonly object[] _thisInstanceAsArray = new object[1];
     private PlayerStateBase _currentState;
@@ -18,35 +19,50 @@ public class PlayerStateMachine : MonoBehaviour
     [SerializeField] private PlayerStateIds _currentStateId;
     public PlayerStateIds CurrentStateId { get => _currentStateId; }
 
+    private PlayerCharacter _playerCharacter;
+    public PlayerCharacter PlayerCharacter { get => _playerCharacter; }
     private CharacterController2D _charController;
 
     // analog movement input values
     private Vector2 _normalizedInput;
     private const float _ANALOG_ANGLE_SIN_COS = 0.3826f;
 
-    // movement fields
+    // Movement fields
     private Vector2 _moveVector;
     public Vector2 MoveVector { get => _moveVector; set => _moveVector = value; }
-    [SerializeField] private float _moveSpeed = 2;
+    [SerializeField] private float _moveSpeed = 3;
     public float MoveSpeed { get => _moveSpeed; }
 
-    #region Input fields
+    // Dodge fields
+    [SerializeField] private float _dodgeDuration = 0.4f;
+    public float DodgeDuration { get => _dodgeDuration; }
+    [SerializeField] private float _dodgeSpeed = 5;
+    public float DodgeSpeed { get => _dodgeSpeed; }
+    [SerializeField] private float _dodgeCooldownDuration = 1.4f;
+    public float DodgeCooldownDuration { get => _dodgeCooldownDuration; }
+    private float _dodgeCooldownTimer;
+    public float DodgeCooldownTimer { get => _dodgeCooldownTimer; set => _dodgeCooldownTimer = value; }
+
     // input fields
+    #region Input fields
     [SerializeField] private InputManagerSO _inputManager;
+    private const float _INPUT_BUFFER_DURATION = 0.2f;
+    private readonly Dictionary<Bool, float> _inputBuffer = new Dictionary<Bool, float>();
+    private readonly List<Bool> _expiredInputList = new List<Bool>();
 
     private Vector2 _inputMove;
-    private bool _isInputInteractPressed;
+    private Bool _isInputInteractPressed = new Bool();
     private bool _isInputInteractHeld;
-    private bool _isInputDodgePressed;
+    private Bool _isInputDodgePressed = new Bool();
     private bool _isInputDodgeHeld;
     private bool _isInputShieldPressed;
     private bool _isInputShieldHeld;
     private bool _isInputPausePressed;
 
     public Vector2 InputMove { get => _inputMove; }
-    public bool IsInputInteractPressed { get => _isInputInteractPressed; set => _isInputInteractPressed = value; }
+    public bool IsInputInteractPressed { get => _isInputInteractPressed.val; set => _isInputInteractPressed.val = value; }
     public bool IsInputInteractHeld { get => _isInputInteractHeld; }
-    public bool IsInputDodgePressed { get => _isInputDodgePressed; set => _isInputDodgePressed = value; }
+    public bool IsInputDodgePressed { get => _isInputDodgePressed.val; set => _isInputDodgePressed.val = value; }
     public bool IsInputDodgeHeld { get => _isInputDodgeHeld; }
     public bool IsInputShieldPressed { get => _isInputShieldPressed; set => _isInputShieldPressed = value; }
     public bool IsInputShieldHeld { get => _isInputShieldHeld; }
@@ -62,6 +78,7 @@ public class PlayerStateMachine : MonoBehaviour
     {
         Application.targetFrameRate = 60; // TODO move to game manager
         _thisInstanceAsArray[0] = this;
+        _playerCharacter = GetComponent<PlayerCharacter>();
         _charController = GetComponent<CharacterController2D>();
 
         _currentState = GetState(PlayerStateIds.Normal);
@@ -87,6 +104,9 @@ public class PlayerStateMachine : MonoBehaviour
         _currentState.UpdateState();
 
         MoveCharacter();
+        UpdateDodgeCooldown();
+
+        CheckInputBuffer();
     }
 
     public PlayerStateBase GetState(PlayerStateIds stateId)
@@ -115,6 +135,18 @@ public class PlayerStateMachine : MonoBehaviour
         _charController.Move(_moveVector);
     }
 
+    private void UpdateDodgeCooldown ()
+    {
+        if (_dodgeCooldownTimer > 0)
+        {
+            _dodgeCooldownTimer -= Time.deltaTime;
+        }
+        else
+        {
+            PlayerCharacter.SpriteRenderer.color = Color.white;
+        }
+    }
+
     #region Input Methods
     private void InitializeInput()
     {
@@ -140,7 +172,37 @@ public class PlayerStateMachine : MonoBehaviour
         _inputManager.ShieldEvent -= OnInputShieldPressed;
         _inputManager.ShieldCancelledEvent -= OnInputShieldReleased;
         _inputManager.PauseEvent -= OnInputPausePressed;
-}
+    }
+
+    private void AddInputBuffer(Bool input)
+    {
+        if (_inputBuffer.ContainsKey(input))
+        {
+            _inputBuffer[input] = Time.time + _INPUT_BUFFER_DURATION;
+        }
+        else
+        {
+            _inputBuffer.Add(input, Time.time + _INPUT_BUFFER_DURATION);
+        }
+    }
+
+    private void CheckInputBuffer()
+    {
+        _expiredInputList.Clear();
+        foreach (Bool input in _inputBuffer.Keys)
+        {
+            if (Time.time > _inputBuffer[input])
+            {
+                _expiredInputList.Add(input);
+            }
+        }
+
+        foreach (Bool input in _expiredInputList)
+        {
+            _inputBuffer.Remove(input);
+            input.val = false;
+        }
+    }
 
     private void OnInputMove(Vector2 input)
     {
@@ -179,22 +241,24 @@ public class PlayerStateMachine : MonoBehaviour
 
     private void OnInputInteractPressed()
     {
-        _isInputInteractPressed = _isInputInteractHeld = true;
+        _isInputInteractPressed.val = _isInputInteractHeld = true;
+        AddInputBuffer(_isInputInteractPressed);
     }
 
     private void OnInputInteractReleased()
     {
-        _isInputInteractPressed = _isInputInteractHeld = false;
+        _isInputInteractPressed.val = _isInputInteractHeld = false;
     }
 
     private void OnInputDodgePressed()
     {
-        _isInputDodgePressed = _isInputDodgeHeld = true;
+        _isInputDodgePressed.val = _isInputDodgeHeld = true;
+        AddInputBuffer(_isInputDodgePressed);
     }
 
     private void OnInputDodgeReleased()
     {
-        _isInputDodgePressed = _isInputDodgeHeld = false;
+        _isInputDodgePressed.val = _isInputDodgeHeld = false;
     }
 
     private void OnInputShieldPressed()
@@ -212,4 +276,12 @@ public class PlayerStateMachine : MonoBehaviour
         _isInputPausePressed = true;
     }
     #endregion
+}
+
+/// <summary>
+/// Class used to keep a refenrece of a bool variable
+/// </summary>
+public class Bool
+{
+    public bool val;
 }
