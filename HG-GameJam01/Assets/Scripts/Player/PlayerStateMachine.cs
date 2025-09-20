@@ -55,6 +55,7 @@ public class PlayerStateMachine : MonoBehaviour
 
     // debug fields
     public float Debug_TimeScale = 1;
+    public Vector2 Debug_AutoMoveVector;
 
 
     private void Awake()

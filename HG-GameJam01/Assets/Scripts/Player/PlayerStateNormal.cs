@@ -23,6 +23,15 @@ public class PlayerStateNormal : PlayerStateBase
 
     public override void UpdateState()
     {
-        _sm.MoveVector = _sm.MoveSpeed * Time.deltaTime * _sm.InputMove.normalized;
+        _sm.MoveVector = Vector2.zero;
+
+        if (_sm.Debug_AutoMoveVector != Vector2.zero)
+        {
+            _sm.MoveVector = _sm.MoveSpeed * Time.deltaTime * _sm.Debug_AutoMoveVector.normalized;
+        }
+        if (_sm.InputMove != Vector2.zero)
+        {
+            _sm.MoveVector = _sm.MoveSpeed * Time.deltaTime * _sm.InputMove.normalized; 
+        }
     }
 }
