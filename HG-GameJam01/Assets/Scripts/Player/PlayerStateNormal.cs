@@ -37,5 +37,8 @@ public class PlayerStateNormal : PlayerStateBase
         {
             _sm.MoveVector = _sm.MoveSpeed * Time.deltaTime * _sm.InputMove.normalized; 
         }
+
+        _sm.PlayerCharacter.Animator.SetInteger(AnimatorHash.Player_MoveDirectionX, (int)_sm.InputMove.x);
+        _sm.PlayerCharacter.Animator.SetInteger(AnimatorHash.Player_MoveDirectionY, (int)_sm.InputMove.y);
     }
 }

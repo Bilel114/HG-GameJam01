@@ -30,13 +30,13 @@ public class PlayerStateMachine : MonoBehaviour
     // Movement fields
     private Vector2 _moveVector;
     public Vector2 MoveVector { get => _moveVector; set => _moveVector = value; }
-    [SerializeField] private float _moveSpeed = 3;
+    [SerializeField] private float _moveSpeed = 1;
     public float MoveSpeed { get => _moveSpeed; }
 
     // Dodge fields
     [SerializeField] private float _dodgeDuration = 0.4f;
     public float DodgeDuration { get => _dodgeDuration; }
-    [SerializeField] private float _dodgeSpeed = 5;
+    [SerializeField] private float _dodgeSpeed = 2;
     public float DodgeSpeed { get => _dodgeSpeed; }
     [SerializeField] private float _dodgeCooldownDuration = 1.4f;
     public float DodgeCooldownDuration { get => _dodgeCooldownDuration; }

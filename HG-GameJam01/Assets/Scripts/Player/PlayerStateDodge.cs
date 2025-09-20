@@ -21,11 +21,16 @@ public class PlayerStateDodge : PlayerStateBase
         _dodgeTimer = _sm.DodgeDuration;
         _sm.DodgeCooldownTimer = _sm.DodgeCooldownDuration;
         _sm.MoveVector = _sm.DodgeSpeed * Time.deltaTime * _sm.InputMove.normalized;
+        _sm.PlayerCharacter.Animator.SetTrigger(AnimatorHash.Player_Dodge);
+        _sm.PlayerCharacter.Animator.SetInteger(AnimatorHash.Player_MoveDirectionX, (int)_sm.InputMove.x);
+        _sm.PlayerCharacter.Animator.SetInteger(AnimatorHash.Player_MoveDirectionY, (int)_sm.InputMove.y);
         _sm.PlayerCharacter.SpriteRenderer.color = Color.blue;
     }
 
     public override void ExitState()
     {
+        _sm.PlayerCharacter.Animator.SetInteger(AnimatorHash.Player_MoveDirectionX, (int)_sm.InputMove.x);
+        _sm.PlayerCharacter.Animator.SetInteger(AnimatorHash.Player_MoveDirectionY, (int)_sm.InputMove.y);
         _sm.PlayerCharacter.SpriteRenderer.color = Color.red;
     }
 
