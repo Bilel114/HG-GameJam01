@@ -42,6 +42,8 @@ public class PlayerStateMachine : MonoBehaviour
     public float DodgeCooldownDuration { get => _dodgeCooldownDuration; }
     private float _dodgeCooldownTimer;
     public float DodgeCooldownTimer { get => _dodgeCooldownTimer; set => _dodgeCooldownTimer = value; }
+    [SerializeField] private GameObject _dustEffectPrefab;
+    public GameObject DustEffectPrefab { get => _dustEffectPrefab; }
 
     // input fields
     #region Input fields
