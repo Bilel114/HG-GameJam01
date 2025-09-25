@@ -1,18 +1,19 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class CarBossStateBase : MonoBehaviour
+public abstract class CarBossStateBase
 {
-    // Start is called before the first frame update
-    void Start()
+    public readonly CarBossStateIds StateId;
+
+    protected CarBossStateMachine _sm;
+
+    public CarBossStateBase(CarBossStateMachine stateMachine, CarBossStateIds stateId)
     {
-        
+        _sm = stateMachine;
+        StateId = stateId;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public abstract void EnterState();
+    public abstract void ExitState();
+    public abstract void CheckSwitchState();
+    public abstract void UpdateState();
 }

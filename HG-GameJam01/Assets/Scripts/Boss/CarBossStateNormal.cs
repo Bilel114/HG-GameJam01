@@ -1,18 +1,62 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class CarBossStateNormal : MonoBehaviour
+public class CarBossStateNormal : CarBossStateBase
 {
-    // Start is called before the first frame update
-    void Start()
+    Vector2 _nextDestination;
+    int _currentPatrolPoint = 0;
+    bool _switchState;
+    CarBossStateIds _nextState;
+
+    public CarBossStateNormal(CarBossStateMachine stateMachine) : base(stateMachine, CarBossStateIds.Normal)
+    {
+    }
+
+    public override void CheckSwitchState()
+    {
+        if (_switchState)
+        {
+            _sm.SwitchState(_nextState);
+        }
+    }
+
+    public override void EnterState()
+    {
+        _nextDestination = _sm.PatrolPoints[0].position;
+        _sm.AttackTimer = Random.Range(_sm.AttackCooldownMin, _sm.AttackCooldownMax);
+        _switchState = false;
+    }
+
+    public override void ExitState()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void UpdateState()
     {
         
+        if (Vector2.Distance(_sm.transform.position, _nextDestination) > 0.01f)
+        {
+            _sm.transform.position = Vector2.MoveTowards(_sm.transform.position, _nextDestination, _sm.MoveSpeed * Time.deltaTime);
+        }
+        else
+        {
+            _currentPatrolPoint = ++_currentPatrolPoint % _sm.PatrolPoints.Length;
+            _nextDestination = _sm.PatrolPoints[_currentPatrolPoint].position;
+        }
+
+        if (_sm.AttackTimer > 0)
+        {
+            _sm.AttackTimer -= Time.deltaTime;
+        }
+        else
+        {
+            Attack();
+        }
+    }
+
+    void Attack ()
+    {
+        _switchState = true;
+        _nextState = CarBossStateIds.RamAttack;
     }
 }
