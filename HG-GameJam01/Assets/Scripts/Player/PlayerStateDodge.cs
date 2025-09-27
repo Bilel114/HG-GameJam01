@@ -24,7 +24,6 @@ public class PlayerStateDodge : PlayerStateBase
         _sm.PlayerCharacter.Animator.SetTrigger(AnimatorHash.Player_Dodge);
         _sm.PlayerCharacter.Animator.SetInteger(AnimatorHash.Player_MoveDirectionX, (int)_sm.InputMove.x);
         _sm.PlayerCharacter.Animator.SetInteger(AnimatorHash.Player_MoveDirectionY, (int)_sm.InputMove.y);
-        //_sm.PlayerCharacter.SpriteRenderer.color = Color.blue;
         GameObject.Instantiate(_sm.DustEffectPrefab, _sm.transform.position, Quaternion.identity);
     }
 
@@ -32,7 +31,7 @@ public class PlayerStateDodge : PlayerStateBase
     {
         _sm.PlayerCharacter.Animator.SetInteger(AnimatorHash.Player_MoveDirectionX, (int)_sm.InputMove.x);
         _sm.PlayerCharacter.Animator.SetInteger(AnimatorHash.Player_MoveDirectionY, (int)_sm.InputMove.y);
-        _sm.PlayerCharacter.SpriteRenderer.color = Color.red;
+        //_sm.PlayerCharacter.SpriteRenderer.color = Color.red;
     }
 
     public override void UpdateState()

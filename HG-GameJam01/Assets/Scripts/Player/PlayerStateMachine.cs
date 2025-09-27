@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 public enum PlayerStateIds { Normal, Dodge, }
@@ -44,6 +45,10 @@ public class PlayerStateMachine : MonoBehaviour
     public float DodgeCooldownTimer { get => _dodgeCooldownTimer; set => _dodgeCooldownTimer = value; }
     [SerializeField] private GameObject _dustEffectPrefab;
     public GameObject DustEffectPrefab { get => _dustEffectPrefab; }
+    
+    public float ImmunityDuration = 1f;
+    public float ImmunityTimer;
+    public float DamageTimeCost = 5;
 
     // input fields
     #region Input fields
@@ -106,9 +111,28 @@ public class PlayerStateMachine : MonoBehaviour
         _currentState.UpdateState();
 
         MoveCharacter();
-        UpdateDodgeCooldown();
+
+        if (_dodgeCooldownTimer > 0)
+        {
+            _dodgeCooldownTimer -= Time.deltaTime;
+        }
+        if (ImmunityTimer >= 0)
+        {
+            ImmunityTimer -= Time.deltaTime;
+        }
 
         CheckInputBuffer();
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.layer == PhysicsLayerIds.EnemyLayer)
+        {
+            if (_currentStateId != PlayerStateIds.Dodge && ImmunityTimer < 0)
+            {
+                GetHit();
+            }
+        }
     }
 
     public PlayerStateBase GetState(PlayerStateIds stateId)
@@ -137,16 +161,20 @@ public class PlayerStateMachine : MonoBehaviour
         _charController.Move(_moveVector);
     }
 
-    private void UpdateDodgeCooldown ()
+    private void GetHit ()
     {
-        if (_dodgeCooldownTimer > 0)
-        {
-            _dodgeCooldownTimer -= Time.deltaTime;
-        }
-        else
-        {
-            PlayerCharacter.SpriteRenderer.color = Color.white;
-        }
+        PlayerCharacter.LevelManager.GameTimer.DecreaseTimer(DamageTimeCost);
+        PlayerCharacter.DamageEffectAnimator.SetTrigger(AnimatorHash.Player_GetHit);
+        // play sound
+        StartCoroutine(GetHitColorCoroutine());
+        ImmunityTimer = ImmunityDuration;
+    }
+
+    IEnumerator GetHitColorCoroutine()
+    {
+        PlayerCharacter.SpriteRenderer.color = Color.red;
+        yield return new WaitForSeconds(0.4f);
+        PlayerCharacter.SpriteRenderer.color = Color.white;
     }
 
     #region Input Methods

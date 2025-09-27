@@ -39,4 +39,19 @@ public class PlayerCharacter : MonoBehaviour
             return _collider;
         }
     }
+
+    private Animator _damageEffectAnimator;
+    public Animator DamageEffectAnimator
+    {
+        get
+        {
+            if (_damageEffectAnimator == null)
+            {
+                _damageEffectAnimator = transform.Find("DamageEffect").GetComponent<Animator>();
+            }
+            return _damageEffectAnimator;
+        }
+    }
+
+    public LevelManager LevelManager;
 }

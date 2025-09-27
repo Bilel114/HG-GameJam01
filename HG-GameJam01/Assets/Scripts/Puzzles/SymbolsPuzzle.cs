@@ -21,7 +21,6 @@ public class SymbolsPuzzle : MonoBehaviour
 
     public void OnSwitchPressed (int switchId)
     {
-        Debug.Log($"Switch Pressed ({switchId})");
         if (switchId == SwitchSequence[CurrentSequenceIndex])
         {
             SymbolSequenceSprites[CurrentSequenceIndex++].color = SymbolOnColor;
