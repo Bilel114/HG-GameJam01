@@ -15,17 +15,20 @@ public class SymbolsPuzzleSwitch : MonoBehaviour
 
     private void OnTriggerEnter2D (Collider2D other)
     {
-        if (other.gameObject.layer == 0) // player
+        if (other.gameObject.layer == PhysicsLayerIds.PlayerLayer)
         {
             SpriteRenderer.sprite = ButtonDownSprite;
             // play button press sound?
-            SymbolsPuzzle.OnSwitchPressed(Id);
+            if (!SymbolsPuzzle.IsPuzzleWon)
+            {
+                SymbolsPuzzle.OnSwitchPressed(Id); 
+            }
         }
     }
 
     private void OnTriggerExit2D (Collider2D other)
     {
-        if (other.gameObject.layer == 0) // player
+        if (other.gameObject.layer == PhysicsLayerIds.PlayerLayer)
         {
             SpriteRenderer.sprite = ButtonUpSprite;
             // play button release sound?

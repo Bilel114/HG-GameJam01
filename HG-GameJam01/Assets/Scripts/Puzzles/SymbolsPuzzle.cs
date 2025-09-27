@@ -3,9 +3,12 @@ using UnityEngine;
 
 public class SymbolsPuzzle : MonoBehaviour
 {
-    public SymbolsPuzzleSwitch[] Switches = new SymbolsPuzzleSwitch[4];
-    public List<int> SwitchSequence = new List<int>() { 0, 1, 3, 0, 2, 3};
+    public bool IsPuzzleWon;
     public int CurrentSequenceIndex = 0;
+    public SymbolsPuzzleSwitch[] Switches = new SymbolsPuzzleSwitch[6];
+    public int[] SwitchSequence = new int[] { 0, 1, 3, 0, 2, 3};
+    public SpriteRenderer[] SymbolSequenceSprites = new SpriteRenderer[6];
+    public Color SymbolOffColor, SymbolOnColor;
 
     private void Awake ()
     {
@@ -18,13 +21,13 @@ public class SymbolsPuzzle : MonoBehaviour
 
     public void OnSwitchPressed (int switchId)
     {
+        Debug.Log($"Switch Pressed ({switchId})");
         if (switchId == SwitchSequence[CurrentSequenceIndex])
         {
-            CurrentSequenceIndex++;
-            // light symbol sprite?
+            SymbolSequenceSprites[CurrentSequenceIndex++].color = SymbolOnColor;
             // play correct sound?
 
-            if (CurrentSequenceIndex == SwitchSequence.Count)
+            if (CurrentSequenceIndex == SwitchSequence.Length)
             {
                 PuzzleWon();
             }
@@ -32,6 +35,10 @@ public class SymbolsPuzzle : MonoBehaviour
         else
         {
             CurrentSequenceIndex = 0;
+            for (int i = 0; i < SymbolSequenceSprites.Length; i++)
+            {
+                SymbolSequenceSprites[i].color = SymbolOffColor;
+            }
             // play mistake sound?
         }
     }
@@ -39,5 +46,7 @@ public class SymbolsPuzzle : MonoBehaviour
     public void PuzzleWon ()
     {
         // damage boss
+        Debug.Log("Symbols Puzzle Won!");
+        IsPuzzleWon = true;
     }
 }
