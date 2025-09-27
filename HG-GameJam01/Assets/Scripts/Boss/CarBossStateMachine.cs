@@ -20,10 +20,12 @@ public class CarBossStateMachine : MonoBehaviour
     public CarBossStateIds CurrentStateId { get => _currentStateId; }
 
     public PlayerCharacter Player;
+    public Animator Animator;
 
     // movement fields
     public float MoveSpeed = 0.75f;
     public Transform[] PatrolPoints = new Transform[2];
+    public int CurrentPatrolPoint;
 
     public float AttackCooldownMin = 3;
     public float AttackCooldownMax = 5;
@@ -32,10 +34,13 @@ public class CarBossStateMachine : MonoBehaviour
     public Vector2 RamAttackPoint;
     public float RamAttackSpeed = 1.5f;
     public float RamAttackDistance;
+    public float RamAttackAnticipationDuration = 1;
+    public float RamAttackEndDuration = 1;
 
     private void Awake()
     {
         _thisInstanceAsArray[0] = this;
+        Animator = GetComponent<Animator>();
 
         _currentState = GetState(CarBossStateIds.Normal);
         _currentStateId = CarBossStateIds.Normal;

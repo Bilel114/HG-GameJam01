@@ -3,7 +3,6 @@
 public class CarBossStateNormal : CarBossStateBase
 {
     Vector2 _nextDestination;
-    int _currentPatrolPoint = 0;
     bool _switchState;
     CarBossStateIds _nextState;
 
@@ -21,7 +20,7 @@ public class CarBossStateNormal : CarBossStateBase
 
     public override void EnterState()
     {
-        _nextDestination = _sm.PatrolPoints[0].position;
+        _nextDestination = _sm.PatrolPoints[_sm.CurrentPatrolPoint].position;
         _sm.AttackTimer = Random.Range(_sm.AttackCooldownMin, _sm.AttackCooldownMax);
         _switchState = false;
     }
@@ -40,8 +39,8 @@ public class CarBossStateNormal : CarBossStateBase
         }
         else
         {
-            _currentPatrolPoint = ++_currentPatrolPoint % _sm.PatrolPoints.Length;
-            _nextDestination = _sm.PatrolPoints[_currentPatrolPoint].position;
+            _sm.CurrentPatrolPoint = ++_sm.CurrentPatrolPoint % _sm.PatrolPoints.Length;
+            _nextDestination = _sm.PatrolPoints[_sm.CurrentPatrolPoint].position;
         }
 
         if (_sm.AttackTimer > 0)

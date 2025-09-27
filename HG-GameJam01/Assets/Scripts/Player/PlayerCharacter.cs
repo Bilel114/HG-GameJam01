@@ -26,4 +26,17 @@ public class PlayerCharacter : MonoBehaviour
             return _animator;
         }
     }
+
+    private BoxCollider2D _collider;
+    public BoxCollider2D Collider
+    {
+        get
+        {
+            if (_collider == null)
+            {
+                _collider = GetComponent<BoxCollider2D>();
+            }
+            return _collider;
+        }
+    }
 }
