@@ -17075,6 +17075,7 @@ MonoBehaviour:
   - {fileID: 1592276622}
   Room1IronGates: {fileID: 1402655787}
   RuneStonePuzzle: {fileID: 1564177951}
+  SymbolsPuzzle: {fileID: 1751791026}
   SymbolSpeed: 1
   CameraRoom2Center: {fileID: 1884057068}
 --- !u!1 &908191492
@@ -24362,6 +24363,7 @@ MonoBehaviour:
   _dodgeSpeed: 2
   _dodgeCooldownDuration: 1.4
   _dustEffectPrefab: {fileID: 1149049130250373510, guid: f5f9052fcf639284dac259e0b62743c4, type: 3}
+  DodgeRechargeColor: {r: 0.4014329, g: 0.4713257, b: 0.8773585, a: 1}
   ImmunityDuration: 1
   ImmunityTimer: 0
   DamageTimeCost: 5

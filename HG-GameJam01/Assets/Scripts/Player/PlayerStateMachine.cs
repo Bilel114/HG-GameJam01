@@ -49,10 +49,11 @@ public class PlayerStateMachine : MonoBehaviour
     public float DodgeCooldownTimer { get => _dodgeCooldownTimer; set => _dodgeCooldownTimer = value; }
     [SerializeField] private GameObject _dustEffectPrefab;
     public GameObject DustEffectPrefab { get => _dustEffectPrefab; }
+    public Color DodgeRechargeColor;
     
     public float ImmunityDuration = 1f;
     public float ImmunityTimer;
-    public float DamageTimeCost = 5;
+    public float DamageTimeCost = 15;
 
     // Shield fields
     public float ShieldCreationTime = 0.16f;
@@ -197,6 +198,14 @@ public class PlayerStateMachine : MonoBehaviour
         if (_dodgeCooldownTimer > 0)
         {
             _dodgeCooldownTimer -= Time.deltaTime;
+            if (_dodgeCooldownTimer < 0.2f)
+            {
+                PlayerCharacter.SpriteRenderer.color = DodgeRechargeColor;
+            }
+            if (_dodgeCooldownTimer <= 0)
+            {
+                PlayerCharacter.SpriteRenderer.color = Color.white;
+            }
         }
         if (ImmunityTimer >= 0)
         {

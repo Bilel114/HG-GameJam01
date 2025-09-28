@@ -13,6 +13,7 @@ public class LevelManager : MonoBehaviour
     public Transform[] Room2PatrolPoints = new Transform[2];
     public Room1IronGates Room1IronGates;
     public RuneStonePuzzle RuneStonePuzzle;
+    public SymbolsPuzzle SymbolsPuzzle;
     public float SymbolSpeed = 1;
     public GameObject CameraRoom2Center;
 
@@ -65,9 +66,32 @@ public class LevelManager : MonoBehaviour
             yield return null;
         }
 
-        // animate symbols?
+        // animate symbols
+        for (int i = 0; i < SymbolsPuzzle.SymbolSequenceSprites.Length; i++)
+        {
+            SymbolsPuzzle.SymbolSequenceSprites[i].sortingOrder = 11;
+        }
+
+        while (Vector2.Distance(Boss.transform.position + 0.64f * Vector3.up, SymbolsPuzzle.SymbolSequenceSprites[0].transform.position) > 0.01f)
+        {
+            for (int i = 0; i < SymbolsPuzzle.SymbolSequenceSprites.Length; i++)
+            {
+                SymbolsPuzzle.SymbolSequenceSprites[i].transform.position = Vector2.MoveTowards(SymbolsPuzzle.SymbolSequenceSprites[i].transform.position,
+                    Boss.transform.position + 0.64f * Vector3.up, SymbolSpeed * Time.deltaTime);
+            }
+            yield return null;
+        }
+
+        for (int i = 0; i < SymbolsPuzzle.SymbolSequenceSprites.Length; i++)
+        {
+            SymbolsPuzzle.SymbolSequenceSprites[i].gameObject.SetActive(false);
+        }
+
+        Boss.GetComponent<SpriteRenderer>().color = Color.red;
+        yield return new WaitForSeconds(0.3f);
         Boss.Animator.Play(AnimatorHash.Boss_Attack1Anticipation);
-        yield return new WaitForSeconds(1);
+        Boss.GetComponent<SpriteRenderer>().color = Color.white;
+        yield return new WaitForSeconds(0.5f);
 
         Player.StateMachine.SwitchToFrozenState = false;
         GameTimer.EnableTimer = true;
