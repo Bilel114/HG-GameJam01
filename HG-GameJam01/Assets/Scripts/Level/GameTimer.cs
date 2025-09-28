@@ -14,11 +14,6 @@ public class GameTimer : MonoBehaviour
     public Color[] TimerColors = new Color[4];
     public bool TimeEnded;
 
-    private void Start ()
-    {
-        StartTimer();
-    }
-
     private void Update ()
     {
         if (EnableTimer)

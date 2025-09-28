@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine;
 
-public enum PlayerStateIds { Normal, Dodge, Shield, }
+public enum PlayerStateIds { Normal, Dodge, Shield, Frozen, }
 
 public class PlayerStateMachine : MonoBehaviour
 {
@@ -14,6 +14,7 @@ public class PlayerStateMachine : MonoBehaviour
         {PlayerStateIds.Normal, typeof(PlayerStateNormal) },
         {PlayerStateIds.Dodge, typeof(PlayerStateDodge) },
         {PlayerStateIds.Shield, typeof(PlayerStateShield) },
+        {PlayerStateIds.Frozen, typeof(PlayerStateFrozen) },
     };
     private readonly object[] _thisInstanceAsArray = new object[1];
     private PlayerStateBase _currentState;
@@ -28,6 +29,8 @@ public class PlayerStateMachine : MonoBehaviour
     // analog movement input values
     private Vector2 _normalizedInput;
     private const float _ANALOG_ANGLE_SIN_COS = 0.3826f;
+
+    public bool SwitchToFrozenState;
 
     // Movement fields
     private Vector2 _moveVector;
@@ -130,7 +133,7 @@ public class PlayerStateMachine : MonoBehaviour
     {
         if (other.gameObject.layer == PhysicsLayerIds.EnemyLayer)
         {
-            if (_currentStateId != PlayerStateIds.Dodge && ImmunityTimer < 0)
+            if (_currentStateId != PlayerStateIds.Dodge && _currentStateId != PlayerStateIds.Frozen && ImmunityTimer < 0)
             {
                 if (IsShieldBarrierUp)
                 {

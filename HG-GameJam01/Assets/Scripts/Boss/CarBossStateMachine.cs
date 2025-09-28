@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public enum CarBossStateIds { Normal, RamAttack, }
+public enum CarBossStateIds { Normal, RamAttack, Frozen, }
 
 public class CarBossStateMachine : MonoBehaviour
 {
@@ -12,6 +12,7 @@ public class CarBossStateMachine : MonoBehaviour
     {
         {CarBossStateIds.Normal, typeof(CarBossStateNormal) },
         {CarBossStateIds.RamAttack, typeof(CarBossStateRamAttack) },
+        {CarBossStateIds.Frozen, typeof(CarBossStateFrozen) },
     };
     private readonly object[] _thisInstanceAsArray = new object[1];
     private CarBossStateBase _currentState;
@@ -26,6 +27,8 @@ public class CarBossStateMachine : MonoBehaviour
     public float MoveSpeed = 0.75f;
     public Transform[] PatrolPoints = new Transform[2];
     public int CurrentPatrolPoint;
+
+    public bool SwitchToFrozenState;
 
     public float AttackCooldownMin = 3;
     public float AttackCooldownMax = 5;
@@ -42,8 +45,9 @@ public class CarBossStateMachine : MonoBehaviour
         _thisInstanceAsArray[0] = this;
         Animator = GetComponent<Animator>();
 
-        _currentState = GetState(CarBossStateIds.Normal);
-        _currentStateId = CarBossStateIds.Normal;
+        _currentState = GetState(CarBossStateIds.Frozen);
+        _currentStateId = CarBossStateIds.Frozen;
+        SwitchToFrozenState = true;
         _currentState.EnterState();
     }
 

@@ -12,7 +12,11 @@ public class CarBossStateNormal : CarBossStateBase
 
     public override void CheckSwitchState()
     {
-        if (_switchState)
+        if (_sm.SwitchToFrozenState)
+        {
+            _sm.SwitchState(CarBossStateIds.Frozen);
+        }
+        else if (_switchState)
         {
             _sm.SwitchState(_nextState);
         }

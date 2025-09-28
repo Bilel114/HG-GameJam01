@@ -10,7 +10,11 @@ public class PlayerStateDodge : PlayerStateBase
 
     public override void CheckSwitchState()
     {
-        if (_dodgeTimer < 0)
+        if (_sm.SwitchToFrozenState)
+        {
+            _sm.SwitchState(PlayerStateIds.Frozen);
+        }
+        else if (_dodgeTimer < 0)
         {
             _sm.SwitchState(PlayerStateIds.Normal);
         }

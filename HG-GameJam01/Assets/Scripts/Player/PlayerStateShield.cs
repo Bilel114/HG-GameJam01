@@ -10,7 +10,11 @@ public class PlayerStateShield : PlayerStateBase
 
     public override void CheckSwitchState()
     {
-        if (_sm.IsShieldInterrupted || !_sm.IsInputShieldHeld)
+        if (_sm.SwitchToFrozenState)
+        {
+            _sm.SwitchState(PlayerStateIds.Frozen);
+        }
+        else if (_sm.IsShieldInterrupted || !_sm.IsInputShieldHeld)
         {
             _sm.SwitchState(PlayerStateIds.Normal);
         }

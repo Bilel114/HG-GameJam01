@@ -8,7 +8,11 @@ public class PlayerStateNormal : PlayerStateBase
 
     public override void CheckSwitchState()
     {
-        if (_sm.IsInputDodgePressed && _sm.DodgeCooldownTimer <= 0 && _sm.InputMove != Vector2.zero)
+        if (_sm.SwitchToFrozenState)
+        {
+            _sm.SwitchState(PlayerStateIds.Frozen);
+        }
+        else if (_sm.IsInputDodgePressed && _sm.DodgeCooldownTimer <= 0 && _sm.InputMove != Vector2.zero)
         {
             _sm.IsInputDodgePressed = false;
             _sm.SwitchState(PlayerStateIds.Dodge);

@@ -3,10 +3,11 @@ using UnityEngine;
 
 public class SymbolsPuzzle : MonoBehaviour
 {
+    public LevelManager LevelManager;
     public bool IsPuzzleWon;
     public int CurrentSequenceIndex = 0;
     public SymbolsPuzzleSwitch[] Switches = new SymbolsPuzzleSwitch[6];
-    public int[] SwitchSequence = new int[] { 0, 1, 3, 0, 2, 3};
+    int[] SwitchSequence = new int[] { 0 }; //, 1, 3, 0, 2, 3};
     public SpriteRenderer[] SymbolSequenceSprites = new SpriteRenderer[6];
     public Color SymbolOffColor, SymbolOnColor;
 
@@ -47,5 +48,6 @@ public class SymbolsPuzzle : MonoBehaviour
         // damage boss
         Debug.Log("Symbols Puzzle Won!");
         IsPuzzleWon = true;
+        LevelManager.TransitionToSecondFight();
     }
 }

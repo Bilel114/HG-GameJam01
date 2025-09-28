@@ -17,7 +17,11 @@ public class CarBossStateRamAttack : CarBossStateBase
 
     public override void CheckSwitchState()
     {
-        if (_attackComplete)
+        if (_sm.SwitchToFrozenState)
+        {
+            _sm.SwitchState(CarBossStateIds.Frozen);
+        }
+        else if (_attackComplete)
         {
             _sm.SwitchState(CarBossStateIds.Normal);
         }
@@ -32,7 +36,7 @@ public class CarBossStateRamAttack : CarBossStateBase
 
     public override void ExitState()
     {
-        
+        _sm.Animator.Play(AnimatorHash.Boss_Move);
     }
 
     public override void UpdateState()

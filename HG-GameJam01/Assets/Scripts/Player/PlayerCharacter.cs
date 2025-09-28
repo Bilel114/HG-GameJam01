@@ -79,5 +79,18 @@ public class PlayerCharacter : MonoBehaviour
         }
     }
 
+    private PlayerStateMachine _stateMachine;
+    public PlayerStateMachine StateMachine
+    {
+        get
+        {
+            if (_stateMachine == null)
+            {
+                _stateMachine = GetComponent<PlayerStateMachine>();
+            }
+            return _stateMachine;
+        }
+    }
+
     public LevelManager LevelManager;
 }
