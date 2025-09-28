@@ -18,7 +18,7 @@ public class PlayerStateFrozen : PlayerStateBase
 
     public override void EnterState()
     {
-        
+        _sm.MoveVector = Vector2.zero;
     }
 
     public override void ExitState()

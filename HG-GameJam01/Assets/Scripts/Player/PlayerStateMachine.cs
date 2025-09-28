@@ -61,6 +61,10 @@ public class PlayerStateMachine : MonoBehaviour
     public bool IsShieldInterrupted;
     public bool IsShieldBarrierUp;
 
+    public RuneStone _currentRuneStone;
+    public RuneOrb _currentRuneOrb;
+    public int CurrentRuneStoneId = -1;
+
     // input fields
     #region Input fields
     [SerializeField] private InputManagerSO _inputManager;
@@ -123,8 +127,8 @@ public class PlayerStateMachine : MonoBehaviour
         _currentState.UpdateState();
 
         MoveCharacter();
-
         UpdateTimers();
+        CheckInteraction();
 
         CheckInputBuffer();
     }
@@ -145,6 +149,20 @@ public class PlayerStateMachine : MonoBehaviour
                     GetHit(); 
                 }
             }
+        }
+        else if (other.gameObject.layer == PhysicsLayerIds.InteractableLayer)
+        {
+            other.TryGetComponent<RuneStone>(out _currentRuneStone);
+            other.TryGetComponent<RuneOrb>(out _currentRuneOrb);
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.gameObject.layer == PhysicsLayerIds.InteractableLayer)
+        {
+            _currentRuneStone = null;
+            _currentRuneOrb = null;
         }
     }
 
@@ -204,6 +222,27 @@ public class PlayerStateMachine : MonoBehaviour
         PlayerCharacter.SpriteRenderer.color = Color.red;
         yield return new WaitForSeconds(0.4f);
         PlayerCharacter.SpriteRenderer.color = Color.white;
+    }
+
+    private void CheckInteraction ()
+    {
+        if (IsInputInteractPressed)
+        {
+            if (_currentRuneStone != null && !_currentRuneStone.IsRuneOn && _currentRuneStone.Id == CurrentRuneStoneId)
+            {
+                IsInputInteractPressed = false;
+                _currentRuneStone.ActivateRuneStone();
+                CurrentRuneStoneId = -1;
+                PlayerCharacter.FollowingRuneSprite.enabled = false;
+            }
+            else if (_currentRuneOrb != null && !_currentRuneOrb.IsSymbolUsed)
+            {
+                IsInputInteractPressed = false;
+                CurrentRuneStoneId = _currentRuneOrb.Id;
+                PlayerCharacter.FollowingRuneSprite.enabled = true;
+                PlayerCharacter.FollowingRuneSprite.sprite = _currentRuneOrb.SpriteRenderer.sprite;
+            }
+        }
     }
 
     #region Input Methods

@@ -9,9 +9,12 @@ public class LevelManager : MonoBehaviour
     public CanvasGroup GameOverScreen;
     public CarBossStateMachine Boss;
     public PlayerCharacter Player;
-    public Transform Room1GatePoint, Room2StartPoint;
+    public Transform Room1GatePoint, Room2StartPoint, Room2Center;
     public Transform[] Room2PatrolPoints = new Transform[2];
     public Room1IronGates Room1IronGates;
+    public RuneStonePuzzle RuneStonePuzzle;
+    public float SymbolSpeed = 1;
+    public GameObject CameraRoom2Center;
 
     private void Awake()
     {
@@ -56,24 +59,79 @@ public class LevelManager : MonoBehaviour
         GameTimer.EnableTimer = false;
         Room1IronGates.OpenGates();
 
-        while (Vector2.Distance(Boss.transform.position, Room1GatePoint.position) > 0.1f)
+        while (Vector2.Distance(Boss.transform.position, Room1GatePoint.position) > 0.01f)
         {
             Boss.transform.position = Vector2.MoveTowards(Boss.transform.position, Room1GatePoint.position, Boss.MoveSpeed * Time.deltaTime);
             yield return null;
         }
 
         // animate symbols?
+        Boss.Animator.Play(AnimatorHash.Boss_Attack1Anticipation);
         yield return new WaitForSeconds(1);
 
-        while (Vector2.Distance(Boss.transform.position, Room2StartPoint.position) > 0.1f)
+        Player.StateMachine.SwitchToFrozenState = false;
+        GameTimer.EnableTimer = true;
+        Boss.Animator.Play(AnimatorHash.Boss_Attack1Charge);
+
+        while (Vector2.Distance(Boss.transform.position, Room2StartPoint.position) > 0.01f)
         {
             Boss.transform.position = Vector2.MoveTowards(Boss.transform.position, Room2StartPoint.position, Boss.RamAttackSpeed * Time.deltaTime);
             yield return null;
         }
-
-        Player.StateMachine.SwitchToFrozenState = false;
+        
         Boss.PatrolPoints = Room2PatrolPoints;
         Boss.SwitchToFrozenState = false;
-        GameTimer.EnableTimer = true;
+    }
+
+    public void SecondFightEnd ()
+    {
+        StartCoroutine(SecondFightEndCoroutine());
+    }
+
+    IEnumerator SecondFightEndCoroutine ()
+    {
+        Player.StateMachine.SwitchToFrozenState = true;
+        Boss.SwitchToFrozenState = true;
+        GameTimer.EnableTimer = false;
+        CameraRoom2Center.SetActive(true);
+
+        while (Vector2.Distance(Boss.transform.position, Room2Center.position) > 0.01f)
+        {
+            Boss.transform.position = Vector2.MoveTowards(Boss.transform.position, Room2Center.position, Boss.MoveSpeed * Time.deltaTime);
+            yield return null;
+        }
+        Boss.Animator.Play(AnimatorHash.Boss_Attack1Anticipation);
+
+        for (int i = 0; i < RuneStonePuzzle.RuneStones.Length; i++)
+        {
+            RuneStonePuzzle.RuneStones[i].SpriteRenderer.sortingOrder = 11;
+        }
+
+        while (Vector2.Distance(Boss.transform.position + 0.64f * Vector3.up, RuneStonePuzzle.RuneStones[0].RuneStoneSymbol.transform.position) > 0.01f)
+        {
+            for (int i = 0; i < RuneStonePuzzle.RuneStones.Length; i++)
+            {
+                RuneStonePuzzle.RuneStones[i].RuneStoneSymbol.transform.position = Vector2.MoveTowards(RuneStonePuzzle.RuneStones[i].RuneStoneSymbol.transform.position, 
+                    Boss.transform.position + 0.64f * Vector3.up, SymbolSpeed * Time.deltaTime);
+            }
+            yield return null;
+        }
+
+        for (int i = 0; i < RuneStonePuzzle.RuneStones.Length; i++)
+        {
+            RuneStonePuzzle.RuneStones[i].RuneStoneSymbol.gameObject.SetActive(false);
+        }
+
+        Boss.GetComponent<SpriteRenderer>().color = Color.red;
+        yield return new WaitForSeconds(0.2f);
+
+        while (Boss.transform.localScale.x > 0.05f)
+        {
+            Boss.transform.localScale *= 0.9f;
+            yield return null;
+        }
+        Boss.gameObject.SetActive(false);
+
+        GameOver();
     }
 }

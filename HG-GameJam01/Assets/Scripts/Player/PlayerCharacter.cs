@@ -92,5 +92,31 @@ public class PlayerCharacter : MonoBehaviour
         }
     }
 
+    private Transform _followingRune;
+    public Transform FollowingRune
+    {
+        get
+        {
+            if (_followingRune == null)
+            {
+                _followingRune = transform.Find("Following Rune");
+            }
+            return _followingRune;
+        }
+    }
+
+    private SpriteRenderer _followingRuneSprite;
+    public SpriteRenderer FollowingRuneSprite
+    {
+        get
+        {
+            if (_followingRuneSprite == null)
+            {
+                _followingRuneSprite = FollowingRune.GetComponent<SpriteRenderer>();
+            }
+            return _followingRuneSprite;
+        }
+    }
+
     public LevelManager LevelManager;
 }

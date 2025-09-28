@@ -26,6 +26,7 @@ public class CarBossStateNormal : CarBossStateBase
     {
         _nextDestination = _sm.PatrolPoints[_sm.CurrentPatrolPoint].position;
         _sm.AttackTimer = Random.Range(_sm.AttackCooldownMin, _sm.AttackCooldownMax);
+        _sm.Animator.Play(AnimatorHash.Boss_Move);
         _switchState = false;
     }
 
