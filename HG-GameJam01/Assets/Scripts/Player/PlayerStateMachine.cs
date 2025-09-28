@@ -103,6 +103,7 @@ public class PlayerStateMachine : MonoBehaviour
 
     private void OnEnable()
     {
+        _inputManager.Enable();
         InitializeInput();
     }
 

@@ -18,7 +18,7 @@ public class InputManagerSO : ScriptableObject, GameInput.IGameplayActions
 
     private GameInput _gameInput;
 
-    public void OnEnable()
+    public void Enable()
     {
         if (_gameInput == null)
         {
