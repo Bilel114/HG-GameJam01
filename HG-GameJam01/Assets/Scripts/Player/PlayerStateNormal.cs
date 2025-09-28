@@ -13,6 +13,10 @@ public class PlayerStateNormal : PlayerStateBase
             _sm.IsInputDodgePressed = false;
             _sm.SwitchState(PlayerStateIds.Dodge);
         }
+        else if (_sm.IsInputShieldHeld && _sm.ShieldCooldownTimer < 0)
+        {
+            _sm.SwitchState(PlayerStateIds.Shield);
+        }
     }
 
     public override void EnterState()
@@ -22,7 +26,7 @@ public class PlayerStateNormal : PlayerStateBase
 
     public override void ExitState()
     {
-        
+        _sm.MoveVector = Vector2.zero;
     }
 
     public override void UpdateState()

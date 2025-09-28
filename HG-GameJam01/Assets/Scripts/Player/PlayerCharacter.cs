@@ -53,5 +53,31 @@ public class PlayerCharacter : MonoBehaviour
         }
     }
 
+    private Animator _shieldEffectAnimator;
+    public Animator ShieldEffectAnimator
+    {
+        get
+        {
+            if (_shieldEffectAnimator == null)
+            {
+                _shieldEffectAnimator = transform.Find("ShieldEffect").GetComponent<Animator>();
+            }
+            return _shieldEffectAnimator;
+        }
+    }
+
+    private GameObject _shieldBarrier;
+    public GameObject ShieldBarrier
+    {
+        get
+        {
+            if (_shieldBarrier == null)
+            {
+                _shieldBarrier = transform.Find("ShieldBarrier").gameObject;
+            }
+            return _shieldBarrier;
+        }
+    }
+
     public LevelManager LevelManager;
 }

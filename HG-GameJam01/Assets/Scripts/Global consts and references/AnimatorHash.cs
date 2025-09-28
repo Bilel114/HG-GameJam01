@@ -6,6 +6,8 @@ public static class AnimatorHash
     public static readonly int Player_MoveDirectionY = Animator.StringToHash("MoveDirectionY");
     public static readonly int Player_Dodge = Animator.StringToHash("Dodge");
     public static readonly int Player_GetHit = Animator.StringToHash("GetHit");
+    public static readonly int Player_ShieldForming = Animator.StringToHash("ShieldForming");
+    public static readonly int Player_ShieldPopping = Animator.StringToHash("ShieldPopping");
 
     public static readonly int Boss_Move = Animator.StringToHash("BossMove");
     public static readonly int Boss_Attack1Anticipation = Animator.StringToHash("BossAttack1_Anticipation");

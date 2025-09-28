@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine;
 
-public enum PlayerStateIds { Normal, Dodge, }
+public enum PlayerStateIds { Normal, Dodge, Shield, }
 
 public class PlayerStateMachine : MonoBehaviour
 {
@@ -13,6 +13,7 @@ public class PlayerStateMachine : MonoBehaviour
     {
         {PlayerStateIds.Normal, typeof(PlayerStateNormal) },
         {PlayerStateIds.Dodge, typeof(PlayerStateDodge) },
+        {PlayerStateIds.Shield, typeof(PlayerStateShield) },
     };
     private readonly object[] _thisInstanceAsArray = new object[1];
     private PlayerStateBase _currentState;
@@ -49,6 +50,13 @@ public class PlayerStateMachine : MonoBehaviour
     public float ImmunityDuration = 1f;
     public float ImmunityTimer;
     public float DamageTimeCost = 5;
+
+    // Shield fields
+    public float ShieldCreationTime = 0.16f;
+    public float ShieldCooldownDuration = 1;
+    public float ShieldCooldownTimer;
+    public bool IsShieldInterrupted;
+    public bool IsShieldBarrierUp;
 
     // input fields
     #region Input fields
@@ -112,14 +120,7 @@ public class PlayerStateMachine : MonoBehaviour
 
         MoveCharacter();
 
-        if (_dodgeCooldownTimer > 0)
-        {
-            _dodgeCooldownTimer -= Time.deltaTime;
-        }
-        if (ImmunityTimer >= 0)
-        {
-            ImmunityTimer -= Time.deltaTime;
-        }
+        UpdateTimers();
 
         CheckInputBuffer();
     }
@@ -130,7 +131,15 @@ public class PlayerStateMachine : MonoBehaviour
         {
             if (_currentStateId != PlayerStateIds.Dodge && ImmunityTimer < 0)
             {
-                GetHit();
+                if (IsShieldBarrierUp)
+                {
+                    IsShieldInterrupted = true;
+                    ImmunityTimer = ImmunityDuration;
+                }
+                else
+                {
+                    GetHit(); 
+                }
             }
         }
     }
@@ -159,6 +168,22 @@ public class PlayerStateMachine : MonoBehaviour
     private void MoveCharacter ()
     {
         _charController.Move(_moveVector);
+    }
+
+    private void UpdateTimers ()
+    {
+        if (_dodgeCooldownTimer > 0)
+        {
+            _dodgeCooldownTimer -= Time.deltaTime;
+        }
+        if (ImmunityTimer >= 0)
+        {
+            ImmunityTimer -= Time.deltaTime;
+        }
+        if (ShieldCooldownTimer >= 0)
+        {
+            ShieldCooldownTimer -= Time.deltaTime;
+        }
     }
 
     private void GetHit ()
