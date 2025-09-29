@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public enum CarBossStateIds { Normal, RamAttack, Frozen, }
+public enum CarBossStateIds { Normal, RamAttack, Frozen, LightAttack, LaserAttack, }
 
 public class CarBossStateMachine : MonoBehaviour
 {
@@ -13,6 +13,8 @@ public class CarBossStateMachine : MonoBehaviour
         {CarBossStateIds.Normal, typeof(CarBossStateNormal) },
         {CarBossStateIds.RamAttack, typeof(CarBossStateRamAttack) },
         {CarBossStateIds.Frozen, typeof(CarBossStateFrozen) },
+        {CarBossStateIds.LightAttack, typeof(CarBossStateLightAttack) },
+        {CarBossStateIds.LaserAttack, typeof(CarBossStateLaserAttack) },
     };
     private readonly object[] _thisInstanceAsArray = new object[1];
     private CarBossStateBase _currentState;
@@ -22,6 +24,7 @@ public class CarBossStateMachine : MonoBehaviour
 
     public PlayerCharacter Player;
     public Animator Animator;
+    public SpriteRenderer SpriteRenderer;
 
     // movement fields
     public float MoveSpeed = 0.75f;
@@ -30,8 +33,8 @@ public class CarBossStateMachine : MonoBehaviour
 
     public bool SwitchToFrozenState;
 
-    public float AttackCooldownMin = 3;
-    public float AttackCooldownMax = 5;
+    public float AttackCooldownMin = 4;
+    public float AttackCooldownMax = 7;
     public float AttackTimer;
 
     public Vector2 RamAttackPoint;
@@ -40,10 +43,26 @@ public class CarBossStateMachine : MonoBehaviour
     public float RamAttackAnticipationDuration = 1;
     public float RamAttackEndDuration = 1;
 
+    public float LightAttackAnticipationDuration = 2;
+    public float LightAttackDuration = 1;
+    public float LightAttackHitBoxOnTime = 5f/6f;
+    public float LightAttackHitBoxOffTime = 1f/3f;
+    public GameObject LightAttackHitBox;
+
+    public GameObject LaserBeamPrefab;
+    public GameObject LaserBeamPointer;
+    public Transform LaserBeamPoint;
+    public float BeamCenterOffset;
+    public float LaserAttackFollowingDuration = 2;
+    public float LaserAttackPauseDuration = 1;
+
+    public bool IsSecondFight;
+
     private void Awake()
     {
         _thisInstanceAsArray[0] = this;
         Animator = GetComponent<Animator>();
+        SpriteRenderer = GetComponent<SpriteRenderer>();
 
         _currentState = GetState(CarBossStateIds.Frozen);
         _currentStateId = CarBossStateIds.Frozen;

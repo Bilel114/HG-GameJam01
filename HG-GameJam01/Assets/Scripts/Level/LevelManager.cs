@@ -44,8 +44,14 @@ public class LevelManager : MonoBehaviour
 
     public void StartFirstFight()
     {
-        Boss.SwitchToFrozenState = false;
+        Invoke(nameof(UnfreezeBoss), 3);
         GameTimer.StartTimer();
+    }
+
+    void UnfreezeBoss()
+    {
+        Boss.SwitchToFrozenState = false;
+        Boss.IsSecondFight = false;
     }
 
     public void TransitionToSecondFight ()
@@ -87,10 +93,10 @@ public class LevelManager : MonoBehaviour
             SymbolsPuzzle.SymbolSequenceSprites[i].gameObject.SetActive(false);
         }
 
-        Boss.GetComponent<SpriteRenderer>().color = Color.red;
+        Boss.SpriteRenderer.color = Color.red;
         yield return new WaitForSeconds(0.3f);
         Boss.Animator.Play(AnimatorHash.Boss_Attack1Anticipation);
-        Boss.GetComponent<SpriteRenderer>().color = Color.white;
+        Boss.SpriteRenderer.color = Color.white;
         yield return new WaitForSeconds(0.5f);
 
         Player.StateMachine.SwitchToFrozenState = false;
@@ -105,6 +111,7 @@ public class LevelManager : MonoBehaviour
         
         Boss.PatrolPoints = Room2PatrolPoints;
         Boss.SwitchToFrozenState = false;
+        Boss.IsSecondFight = true;
     }
 
     public void SecondFightEnd ()

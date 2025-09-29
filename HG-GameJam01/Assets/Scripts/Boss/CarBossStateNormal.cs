@@ -61,6 +61,20 @@ public class CarBossStateNormal : CarBossStateBase
     void Attack ()
     {
         _switchState = true;
-        _nextState = CarBossStateIds.RamAttack;
+        int attack = _sm.IsSecondFight ? Random.Range(0, 3) : Random.Range(0, 2);
+        switch (attack)
+        {
+            case 0:
+                _nextState = CarBossStateIds.RamAttack;
+                break;
+            case 1:
+                _nextState = CarBossStateIds.LightAttack;
+                break;
+            case 2:
+                _nextState = CarBossStateIds.LaserAttack;
+                break;
+
+        }
+        _nextState = CarBossStateIds.LaserAttack;
     }
 }

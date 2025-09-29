@@ -43,7 +43,7 @@ public class PlayerStateMachine : MonoBehaviour
     public float DodgeDuration { get => _dodgeDuration; }
     [SerializeField] private float _dodgeSpeed = 2;
     public float DodgeSpeed { get => _dodgeSpeed; }
-    [SerializeField] private float _dodgeCooldownDuration = 1.4f;
+    [SerializeField] private float _dodgeCooldownDuration = 1.1f;
     public float DodgeCooldownDuration { get => _dodgeCooldownDuration; }
     private float _dodgeCooldownTimer;
     public float DodgeCooldownTimer { get => _dodgeCooldownTimer; set => _dodgeCooldownTimer = value; }
@@ -53,7 +53,7 @@ public class PlayerStateMachine : MonoBehaviour
     
     public float ImmunityDuration = 1f;
     public float ImmunityTimer;
-    public float DamageTimeCost = 15;
+    public float DamageTimeCost = 20;
 
     // Shield fields
     public float ShieldCreationTime = 0.16f;

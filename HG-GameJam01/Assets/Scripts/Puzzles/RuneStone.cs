@@ -6,7 +6,7 @@ public class RuneStone : MonoBehaviour
 {
     public Transform RuneStoneSymbol;
     public SpriteRenderer SpriteRenderer;
-    public Color RuneOnColor;
+    public Color RuneOnColor, RuneOffColor;
     public bool IsRuneOn;
     public int Id;
     public RuneStonePuzzle Puzzle;
@@ -14,14 +14,14 @@ public class RuneStone : MonoBehaviour
     private void Awake()
     {
         SpriteRenderer = RuneStoneSymbol.GetComponent<SpriteRenderer>();
-        SpriteRenderer.enabled = false;
+        RuneOffColor = SpriteRenderer.color;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (!IsRuneOn && other.gameObject.layer == PhysicsLayerIds.PlayerLayer)
         {
-            SpriteRenderer.enabled = true;
+            SpriteRenderer.color = Color.white;
         }
     }
 
@@ -29,7 +29,7 @@ public class RuneStone : MonoBehaviour
     {
         if (!IsRuneOn && other.gameObject.layer == PhysicsLayerIds.PlayerLayer)
         {
-            SpriteRenderer.enabled = false;
+            SpriteRenderer.color = RuneOffColor;
         }
     }
 
