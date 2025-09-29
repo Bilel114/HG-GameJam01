@@ -10,6 +10,7 @@ public class LevelManager : MonoBehaviour
     public Image TitleImage;
     public float TitleSpeed, TitleAlphaSpeed, TitleScreenFadeSpeed;
     public GameObject TitleScreenText;
+    public Image WhiteScreen;
     public GameTimer GameTimer;
     public CanvasGroup GameOverScreen;
     public CarBossStateMachine Boss;
@@ -21,6 +22,7 @@ public class LevelManager : MonoBehaviour
     public SymbolsPuzzle SymbolsPuzzle;
     public float SymbolSpeed = 1;
     public GameObject CameraRoom2Center;
+    public StartingText StartingText;
 
     private void Awake()
     {
@@ -34,10 +36,8 @@ public class LevelManager : MonoBehaviour
 
     IEnumerator TitleScreenCoroutine()
     {
-            Debug.Log($"TITLE image pos {TitleImage.rectTransform.localPosition}");
         while (TitleImage.rectTransform.localPosition.y < 0)
         {
-            Debug.Log($"TITLE image pos {TitleImage.rectTransform.position}");
             TitleImage.rectTransform.localPosition += TitleSpeed * Time.deltaTime * Vector3.up;
             TitleImage.color = new Color(1, 1, 1, TitleImage.color.a + TitleAlphaSpeed * Time.deltaTime);
             yield return null;
@@ -57,6 +57,7 @@ public class LevelManager : MonoBehaviour
             yield return null;
         }
 
+        StartingText.StartTextScroll();
         Player.StateMachine.SwitchToFrozenState = false;
     }
 
@@ -65,18 +66,42 @@ public class LevelManager : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
-    public void GameOver()
+    public void GameOver(bool isGoodEnding)
     {
-        GameOverScreen.gameObject.SetActive(true);
-        StartCoroutine(FadeInCoroutine());
+        if (isGoodEnding)
+        {
+            WhiteScreen.gameObject.SetActive(true); 
+        }
+        else
+        {
+            Player.StateMachine.SwitchToFrozenState = true;
+            Boss.SwitchToFrozenState = true;
+            GameOverScreen.gameObject.SetActive(true);
+        }
+        StartCoroutine(FadeInCoroutine(isGoodEnding));
     }
 
-    IEnumerator FadeInCoroutine()
+    IEnumerator FadeInCoroutine(bool isGoodEnding)
     {
-        while (GameOverScreen.alpha < 1)
+        if (isGoodEnding)
         {
-            GameOverScreen.alpha += Time.deltaTime;
-            yield return null;
+            while (WhiteScreen.color.a < 1)
+            {
+                WhiteScreen.color = new Color(1, 1, 1, WhiteScreen.color.a + TitleAlphaSpeed * Time.deltaTime);
+                yield return null;
+            }
+            yield return new WaitForSeconds(1);
+            SceneManager.LoadScene(1);
+        }
+        else
+        {
+            while (GameOverScreen.alpha < 1)
+            {
+                GameOverScreen.alpha += Time.deltaTime;
+                yield return null;
+            }
+            yield return new WaitForSeconds(1);
+            SceneManager.LoadScene(2);
         }
     }
 
@@ -201,6 +226,6 @@ public class LevelManager : MonoBehaviour
         }
         Boss.gameObject.SetActive(false);
 
-        GameOver();
+        GameOver(true);
     }
 }

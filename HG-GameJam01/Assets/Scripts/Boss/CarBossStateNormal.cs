@@ -75,6 +75,5 @@ public class CarBossStateNormal : CarBossStateBase
                 break;
 
         }
-        _nextState = CarBossStateIds.LaserAttack;
     }
 }

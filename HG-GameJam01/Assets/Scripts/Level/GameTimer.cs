@@ -66,6 +66,6 @@ public class GameTimer : MonoBehaviour
     public void OnTimeEnded ()
     {
         Debug.Log("Game Over!");
-        GetComponent<LevelManager>().GameOver();
+        GetComponent<LevelManager>().GameOver(false);
     }
 }
