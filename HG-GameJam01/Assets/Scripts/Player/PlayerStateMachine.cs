@@ -104,8 +104,9 @@ public class PlayerStateMachine : MonoBehaviour
         _playerCharacter = GetComponent<PlayerCharacter>();
         _charController = GetComponent<CharacterController2D>();
 
-        _currentState = GetState(PlayerStateIds.Normal);
-        _currentStateId = PlayerStateIds.Normal;
+        _currentState = GetState(PlayerStateIds.Frozen);
+        _currentStateId = PlayerStateIds.Frozen;
+        SwitchToFrozenState = true;
         _currentState.EnterState();
     }
 

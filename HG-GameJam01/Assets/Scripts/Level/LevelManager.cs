@@ -1,10 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
+    public CanvasGroup TitleScreen;
+    public Image TitleImage;
+    public float TitleSpeed, TitleAlphaSpeed, TitleScreenFadeSpeed;
+    public GameObject TitleScreenText;
     public GameTimer GameTimer;
     public CanvasGroup GameOverScreen;
     public CarBossStateMachine Boss;
@@ -20,6 +25,39 @@ public class LevelManager : MonoBehaviour
     private void Awake()
     {
         GameTimer = GetComponent<GameTimer>();
+    }
+
+    private void Start()
+    {
+        StartCoroutine(TitleScreenCoroutine());
+    }
+
+    IEnumerator TitleScreenCoroutine()
+    {
+            Debug.Log($"TITLE image pos {TitleImage.rectTransform.localPosition}");
+        while (TitleImage.rectTransform.localPosition.y < 0)
+        {
+            Debug.Log($"TITLE image pos {TitleImage.rectTransform.position}");
+            TitleImage.rectTransform.localPosition += TitleSpeed * Time.deltaTime * Vector3.up;
+            TitleImage.color = new Color(1, 1, 1, TitleImage.color.a + TitleAlphaSpeed * Time.deltaTime);
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(0.2f);
+        TitleScreenText.SetActive(true);
+
+        while (!Input.anyKeyDown)
+        {
+            yield return null;
+        }
+
+        while (TitleScreen.alpha > 0)
+        {
+            TitleScreen.alpha -= TitleScreenFadeSpeed * Time.deltaTime;
+            yield return null;
+        }
+
+        Player.StateMachine.SwitchToFrozenState = false;
     }
 
     public void RetryLevel ()
