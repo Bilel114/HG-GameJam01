@@ -143,6 +143,11 @@ public class PlayerStateMachine : MonoBehaviour
     {
         if (other.gameObject.layer == PhysicsLayerIds.EnemyLayer)
         {
+            if (other.TryGetComponent<Minion>(out _))
+            {
+                other.gameObject.SetActive(false);
+            }
+
             if (_currentStateId != PlayerStateIds.Dodge && _currentStateId != PlayerStateIds.Frozen && ImmunityTimer < 0)
             {
                 if (IsShieldBarrierUp)
