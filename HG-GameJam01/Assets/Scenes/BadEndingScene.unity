@@ -316,8 +316,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 687321047}
-  - component: {fileID: 687321046}
   - component: {fileID: 687321048}
+  - component: {fileID: 687321046}
   - component: {fileID: 687321045}
   - component: {fileID: 687321044}
   m_Layer: 5
@@ -400,6 +400,7 @@ RectTransform:
   m_Children:
   - {fileID: 1908085678}
   - {fileID: 2071666754}
+  - {fileID: 850240753}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -426,9 +427,22 @@ MonoBehaviour:
     about it.\r\n- Morgan: I might need some extra help; it was kind of confusing
     and overwhelming too. \r\n- Helena: I\u2019ll try to help you however I can.
     You can try again later."
+  DialogueStrings:
+  - '<color=#EFC551>Helena</color>: '
+  - You look so tired. Were you able to repair the car?
+  - '<color=#EFC551>Morgan</color>: '
+  - 'I''m sorry, I didn''t have enough time this week. I got distracted. '
+  - '<color=#EFC551>Helena</color>: '
+  - 'I think we would have to postpone our road trip. Sigh, I was so excited about
+    it. '
+  - '<color=#EFC551>Morgan</color>: '
+  - I might need some extra help, it was kind of confusing and overwhelming too.
+  - '<color=#EFC551>Helena</color>: '
+  - "I\u2019ll try to help you however I can. You can try again later."
   TextComponent: {fileID: 734932542}
   Speed: 0.02
   RetryButton: {fileID: 2071666755}
+  FadeInImage: {fileID: 850240750}
 --- !u!1 &691651076
 GameObject:
   m_ObjectHideFlags: 0
@@ -563,10 +577,10 @@ RectTransform:
   m_Father: {fileID: 1908085678}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -170}
+  m_SizeDelta: {x: 265, y: 330}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &734932542
 MonoBehaviour:
@@ -615,8 +629,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 15
-  m_fontSizeBase: 15
+  m_fontSize: 14.6
+  m_fontSizeBase: 14.6
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -665,6 +679,94 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 734932540}
   m_CullTransparentMesh: 1
+--- !u!1 &850240749
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 850240753}
+  - component: {fileID: 850240752}
+  - component: {fileID: 850240751}
+  - component: {fileID: 850240750}
+  m_Layer: 5
+  m_Name: Black Screen
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!225 &850240750
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 850240749}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &850240751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 850240749}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &850240752
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 850240749}
+  m_CullTransparentMesh: 0
+--- !u!224 &850240753
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 850240749}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 687321047}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &944548803
 GameObject:
   m_ObjectHideFlags: 0
@@ -995,7 +1097,7 @@ GameObject:
   - component: {fileID: 1908085680}
   - component: {fileID: 1908085679}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Dialogue box
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1034,15 +1136,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.49056602, g: 0.49056602, b: 0.49056602, a: 0.5254902}
+  m_Color: {r: 0.49056602, g: 0.49056602, b: 0.49056602, a: 0.87058824}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -1073,7 +1175,7 @@ GameObject:
   - component: {fileID: 2071666756}
   - component: {fileID: 2071666755}
   m_Layer: 5
-  m_Name: Button (1)
+  m_Name: Press any key image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

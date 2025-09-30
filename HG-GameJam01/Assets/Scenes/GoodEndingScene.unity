@@ -441,6 +441,94 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &601188223
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 601188227}
+  - component: {fileID: 601188226}
+  - component: {fileID: 601188225}
+  - component: {fileID: 601188224}
+  m_Layer: 5
+  m_Name: White Screen
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!225 &601188224
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 601188223}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &601188225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 601188223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &601188226
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 601188223}
+  m_CullTransparentMesh: 0
+--- !u!224 &601188227
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 601188223}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 687321047}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0.000061035156}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &672265194
 GameObject:
   m_ObjectHideFlags: 0
@@ -455,7 +543,7 @@ GameObject:
   - component: {fileID: 672265197}
   - component: {fileID: 672265196}
   m_Layer: 5
-  m_Name: Button
+  m_Name: Press any key image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -595,8 +683,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 687321047}
-  - component: {fileID: 687321046}
   - component: {fileID: 687321048}
+  - component: {fileID: 687321046}
   - component: {fileID: 687321045}
   - component: {fileID: 687321044}
   m_Layer: 5
@@ -679,6 +767,7 @@ RectTransform:
   m_Children:
   - {fileID: 1908085678}
   - {fileID: 672265195}
+  - {fileID: 601188227}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -705,9 +794,24 @@ MonoBehaviour:
     news! Then is it ready for our road trip?\r\n- Morgan: Yes! \u201CThe elephant\u201D
     is ready to travel!\r\n- Helena: Haha you have nicknames for everything.\r\n-
     Morgan: It\u2019s easier for me to imagine my task like some kind of adventure!\r"
+  DialogueStrings:
+  - '<color=#EFC551>Helena</color>: '
+  - How did it go with the car, honey?
+  - '<color=#EFC551>Morgan</color>: '
+  - It took me a while! At first I was confused with what pieces I needed and where
+    each piece went. But in the end, I got it done.
+  - '<color=#EFC551>Helena</color>: '
+  - "That\u2019s wonderful news! Then is it ready for our road trip?"
+  - '<color=#EFC551>Morgan</color>: '
+  - "Yes! \u201CThe elephant\u201D is ready to travel!"
+  - '<color=#EFC551>Helena</color>: '
+  - Haha you have nicknames for everything.
+  - '<color=#EFC551>Morgan</color>: '
+  - "It\u2019s easier for me to imagine my task like some kind of adventure!"
   TextComponent: {fileID: 734932542}
   Speed: 0.02
   RetryButton: {fileID: 672265196}
+  FadeInImage: {fileID: 601188224}
 --- !u!1 &691651076
 GameObject:
   m_ObjectHideFlags: 0
@@ -842,10 +946,10 @@ RectTransform:
   m_Father: {fileID: 1908085678}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -170}
+  m_SizeDelta: {x: 265, y: 330}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &734932542
 MonoBehaviour:
@@ -894,8 +998,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 15
-  m_fontSizeBase: 15
+  m_fontSize: 14.6
+  m_fontSizeBase: 14.6
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1140,7 +1244,7 @@ GameObject:
   - component: {fileID: 1908085680}
   - component: {fileID: 1908085679}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Dialogue box
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1179,15 +1283,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.49056602, g: 0.49056602, b: 0.49056602, a: 0.5254902}
+  m_Color: {r: 0.49056602, g: 0.49056602, b: 0.49056602, a: 0.87058824}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4

@@ -51,6 +51,7 @@ public class LevelManager : MonoBehaviour
             yield return null;
         }
 
+        TitleScreenText.SetActive(false);
         while (TitleScreen.alpha > 0)
         {
             TitleScreen.alpha -= TitleScreenFadeSpeed * Time.deltaTime;
@@ -58,7 +59,6 @@ public class LevelManager : MonoBehaviour
         }
 
         StartingText.StartTextScroll();
-        Player.StateMachine.SwitchToFrozenState = false;
     }
 
     public void RetryLevel ()
@@ -115,7 +115,10 @@ public class LevelManager : MonoBehaviour
     {
         Boss.SwitchToFrozenState = false;
         Boss.IsSecondFight = false;
-    }
+        Boss.MoveSpeed = 0.75f;
+        Boss.AttackCooldownMin = 4;
+        Boss.AttackCooldownMax = 7;
+}
 
     public void TransitionToSecondFight ()
     {
@@ -126,6 +129,7 @@ public class LevelManager : MonoBehaviour
     {
         Player.StateMachine.SwitchToFrozenState = true;
         Boss.SwitchToFrozenState = true;
+        Boss.SpriteRenderer.sortingOrder = 10;
         GameTimer.EnableTimer = false;
         Room1IronGates.OpenGates();
 
@@ -175,6 +179,9 @@ public class LevelManager : MonoBehaviour
         Boss.PatrolPoints = Room2PatrolPoints;
         Boss.SwitchToFrozenState = false;
         Boss.IsSecondFight = true;
+        Boss.MoveSpeed = 1.25f;
+        Boss.AttackCooldownMin = 3;
+        Boss.AttackCooldownMax = 5;
     }
 
     public void SecondFightEnd ()
@@ -186,6 +193,7 @@ public class LevelManager : MonoBehaviour
     {
         Player.StateMachine.SwitchToFrozenState = true;
         Boss.SwitchToFrozenState = true;
+        Boss.SpriteRenderer.sortingOrder = 10;
         GameTimer.EnableTimer = false;
         CameraRoom2Center.SetActive(true);
 

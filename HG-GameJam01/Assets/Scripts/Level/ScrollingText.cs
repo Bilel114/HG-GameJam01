@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
@@ -7,9 +7,12 @@ using TMPro;
 public class ScrollingText : MonoBehaviour
 {
     [TextArea] public string TextString;
+    public string[] DialogueStrings;
+    StringBuilder stringBuilder = new StringBuilder();
     public TextMeshProUGUI TextComponent;
-    public float Speed = 0.1f;
+    public float Speed = 0.02f;
     public CanvasGroup RetryButton;
+    public CanvasGroup FadeInImage;
 
     private void Start()
     {
@@ -18,10 +21,30 @@ public class ScrollingText : MonoBehaviour
 
     IEnumerator ScrollTextCoroutine ()
     {
-        for (int i = 0; i < TextString.Length + 1; i++)
+        while (FadeInImage.alpha > 0)
         {
-            TextComponent.text = TextString.Substring(0, i);
-            yield return new WaitForSeconds(Speed);
+            FadeInImage.alpha -= Time.deltaTime;
+            yield return null;
+        }
+
+        for (int i = 0; i < DialogueStrings.Length; i++)
+        {
+            if (i % 2 == 0)
+            {
+                stringBuilder.Append(DialogueStrings[i]);
+                TextComponent.text = stringBuilder.ToString();
+                yield return new WaitForSeconds(Speed);
+            }
+            else
+            {
+                for (int j = 0; j < DialogueStrings[i].Length; j++)
+                {
+                    stringBuilder.Append(DialogueStrings[i][j]);
+                    TextComponent.text = stringBuilder.ToString();
+                    yield return new WaitForSeconds(Speed);
+                }
+                stringBuilder.Append('\n');
+            }
         }
 
         RetryButton.gameObject.SetActive(true);
