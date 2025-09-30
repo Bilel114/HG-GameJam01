@@ -23,10 +23,14 @@ public class LevelManager : MonoBehaviour
     public float SymbolSpeed = 1;
     public GameObject CameraRoom2Center;
     public StartingText StartingText;
+    AudioSource _audioSource;
+    public AudioSource TitleScreenAudioSource;
+    public AudioClip FightWonSound, GameOverSound, RuneActivaionSound;
 
     private void Awake()
     {
         GameTimer = GetComponent<GameTimer>();
+        _audioSource = GetComponent<AudioSource>();
     }
 
     private void Start()
@@ -55,9 +59,11 @@ public class LevelManager : MonoBehaviour
         while (TitleScreen.alpha > 0)
         {
             TitleScreen.alpha -= TitleScreenFadeSpeed * Time.deltaTime;
+            TitleScreenAudioSource.volume -= 0.25f * Time.deltaTime;
             yield return null;
         }
 
+        TitleScreenAudioSource.enabled = false;
         StartingText.StartTextScroll();
     }
 
@@ -85,9 +91,11 @@ public class LevelManager : MonoBehaviour
     {
         if (isGoodEnding)
         {
+            Player.AudioSource.PlayOneShot(FightWonSound);
             while (WhiteScreen.color.a < 1)
             {
                 WhiteScreen.color = new Color(1, 1, 1, WhiteScreen.color.a + TitleAlphaSpeed * Time.deltaTime);
+                _audioSource.volume -= Time.deltaTime;
                 yield return null;
             }
             yield return new WaitForSeconds(1);
@@ -95,12 +103,14 @@ public class LevelManager : MonoBehaviour
         }
         else
         {
+            Player.AudioSource.PlayOneShot(GameOverSound);
             while (GameOverScreen.alpha < 1)
             {
                 GameOverScreen.alpha += Time.deltaTime;
+                _audioSource.volume -= Time.deltaTime;
                 yield return null;
             }
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(2);
             SceneManager.LoadScene(2);
         }
     }
@@ -109,6 +119,7 @@ public class LevelManager : MonoBehaviour
     {
         Invoke(nameof(UnfreezeBoss), 3);
         GameTimer.StartTimer();
+        _audioSource.enabled = true;
     }
 
     void UnfreezeBoss()
@@ -145,6 +156,7 @@ public class LevelManager : MonoBehaviour
             SymbolsPuzzle.SymbolSequenceSprites[i].sortingOrder = 11;
         }
 
+        Player.AudioSource.PlayOneShot(RuneActivaionSound);
         while (Vector2.Distance(Boss.transform.position + 0.64f * Vector3.up, SymbolsPuzzle.SymbolSequenceSprites[0].transform.position) > 0.01f)
         {
             for (int i = 0; i < SymbolsPuzzle.SymbolSequenceSprites.Length; i++)
@@ -161,6 +173,7 @@ public class LevelManager : MonoBehaviour
         }
 
         Boss.SpriteRenderer.color = Color.red;
+        Boss.AudioSource.PlayOneShot(Boss.TakingDamageSound);
         yield return new WaitForSeconds(0.3f);
         Boss.Animator.Play(AnimatorHash.Boss_Attack1Anticipation);
         Boss.SpriteRenderer.color = Color.white;
@@ -169,6 +182,7 @@ public class LevelManager : MonoBehaviour
         Player.StateMachine.SwitchToFrozenState = false;
         GameTimer.EnableTimer = true;
         Boss.Animator.Play(AnimatorHash.Boss_Attack1Charge);
+        Boss.AudioSource.PlayOneShot(Boss.RamAttackSound);
 
         while (Vector2.Distance(Boss.transform.position, Room2StartPoint.position) > 0.01f)
         {
@@ -208,6 +222,7 @@ public class LevelManager : MonoBehaviour
         {
             RuneStonePuzzle.RuneStones[i].SpriteRenderer.sortingOrder = 11;
         }
+        Player.AudioSource.PlayOneShot(RuneActivaionSound);
 
         while (Vector2.Distance(Boss.transform.position + 0.64f * Vector3.up, RuneStonePuzzle.RuneStones[0].RuneStoneSymbol.transform.position) > 0.01f)
         {
@@ -225,6 +240,7 @@ public class LevelManager : MonoBehaviour
         }
 
         Boss.GetComponent<SpriteRenderer>().color = Color.red;
+        Boss.AudioSource.PlayOneShot(Boss.TakingDamageSound);
         yield return new WaitForSeconds(0.2f);
 
         while (Boss.transform.localScale.x > 0.05f)

@@ -25,6 +25,7 @@ public class PlayerStateShield : PlayerStateBase
         _sm.PlayerCharacter.ShieldEffectAnimator.Play(AnimatorHash.Player_ShieldForming);
         _shieldCreationTimer = _sm.ShieldCreationTime;
         _sm.IsShieldInterrupted = false;
+        _sm.PlayerCharacter.AudioSource.PlayOneShot(_sm.ShieldCreationSound);
     }
 
     public override void ExitState()
@@ -37,6 +38,7 @@ public class PlayerStateShield : PlayerStateBase
             if (_sm.IsShieldInterrupted)
             {
                 _sm.PlayerCharacter.ShieldEffectAnimator.Play(AnimatorHash.Player_ShieldPopping);
+                _sm.PlayerCharacter.AudioSource.PlayOneShot(_sm.ShieldPoppingSound);
             }
         }
         _sm.ShieldCooldownTimer = _sm.ShieldCooldownDuration;

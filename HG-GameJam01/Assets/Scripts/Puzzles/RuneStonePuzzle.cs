@@ -31,7 +31,6 @@ public class RuneStonePuzzle : MonoBehaviour
 
     public void PuzzleWon()
     {
-        Debug.Log("PUZZLE WON");
         LevelManager.SecondFightEnd();
     }
 }

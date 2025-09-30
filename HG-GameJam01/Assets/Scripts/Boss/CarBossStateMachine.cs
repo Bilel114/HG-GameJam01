@@ -56,12 +56,16 @@ public class CarBossStateMachine : MonoBehaviour
     public float LaserAttackFollowingDuration = 2;
     public float LaserAttackPauseDuration = 1;
 
+    public AudioSource AudioSource;
+    public AudioClip TakingDamageSound, RamAttackSound, AnticipationSound, LightAttackSound;
+
     public bool IsSecondFight;
 
     private void Awake()
     {
         _thisInstanceAsArray[0] = this;
         Animator = GetComponent<Animator>();
+        AudioSource = GetComponent<AudioSource>();
         SpriteRenderer = GetComponent<SpriteRenderer>();
 
         _currentState = GetState(CarBossStateIds.Frozen);

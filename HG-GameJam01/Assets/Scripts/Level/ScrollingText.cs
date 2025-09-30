@@ -13,6 +13,8 @@ public class ScrollingText : MonoBehaviour
     public float Speed = 0.02f;
     public CanvasGroup RetryButton;
     public CanvasGroup FadeInImage;
+    public AudioSource AudioSource;
+    int AudioTimer;
 
     private void Start()
     {
@@ -33,6 +35,7 @@ public class ScrollingText : MonoBehaviour
             {
                 stringBuilder.Append(DialogueStrings[i]);
                 TextComponent.text = stringBuilder.ToString();
+                DialogueAudioTick();
                 yield return new WaitForSeconds(Speed);
             }
             else
@@ -41,6 +44,7 @@ public class ScrollingText : MonoBehaviour
                 {
                     stringBuilder.Append(DialogueStrings[i][j]);
                     TextComponent.text = stringBuilder.ToString();
+                    DialogueAudioTick();
                     yield return new WaitForSeconds(Speed);
                 }
                 stringBuilder.Append('\n');
@@ -64,5 +68,16 @@ public class ScrollingText : MonoBehaviour
     public void Retry ()
     {
         SceneManager.LoadScene(0);
+    }
+
+    void DialogueAudioTick()
+    {
+        AudioTimer--;
+
+        if (AudioTimer <= 0)
+        {
+            AudioSource.Play();
+            AudioTimer = Random.Range(2, 4);
+        }
     }
 }

@@ -74,6 +74,7 @@ public class CarBossStateRamAttack : CarBossStateBase
                 {
                     _attackPhase = RamAttackPhases.Ramming;
                     _sm.Animator.Play(AnimatorHash.Boss_Attack1Charge);
+                    _sm.AudioSource.PlayOneShot(_sm.RamAttackSound);
                 }
                 break;
 

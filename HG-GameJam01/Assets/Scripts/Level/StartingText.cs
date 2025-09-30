@@ -11,6 +11,8 @@ public class StartingText : MonoBehaviour
     StringBuilder stringBuilder = new StringBuilder();
     public TextMeshPro TextComponent;
     public float Speed = 0.02f;
+    public AudioSource AudioSource;
+    int AudioTimer;
 
     public void StartTextScroll ()
     {
@@ -25,6 +27,7 @@ public class StartingText : MonoBehaviour
             {
                 stringBuilder.Append(DialogueStrings[i]);
                 TextComponent.text = stringBuilder.ToString();
+                DialogueAudioTick();
                 yield return new WaitForSeconds(Speed);
             }
             else
@@ -33,6 +36,7 @@ public class StartingText : MonoBehaviour
                 {
                     stringBuilder.Append(DialogueStrings[i][j]);
                     TextComponent.text = stringBuilder.ToString();
+                    DialogueAudioTick();
                     yield return new WaitForSeconds(Speed);
                 }
                 stringBuilder.Append('\n');
@@ -46,5 +50,16 @@ public class StartingText : MonoBehaviour
 
         transform.parent.gameObject.SetActive(false);
         Player.StateMachine.SwitchToFrozenState = false;
+    }
+
+    void DialogueAudioTick ()
+    {
+        AudioTimer--;
+
+        if (AudioTimer <= 0)
+        {
+            AudioSource.Play();
+            AudioTimer = Random.Range(2, 4);
+        }
     }
 }

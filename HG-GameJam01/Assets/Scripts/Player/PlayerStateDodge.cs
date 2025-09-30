@@ -29,6 +29,7 @@ public class PlayerStateDodge : PlayerStateBase
         _sm.PlayerCharacter.Animator.SetInteger(AnimatorHash.Player_MoveDirectionX, (int)_sm.InputMove.x);
         _sm.PlayerCharacter.Animator.SetInteger(AnimatorHash.Player_MoveDirectionY, (int)_sm.InputMove.y);
         GameObject.Instantiate(_sm.DustEffectPrefab, _sm.transform.position, Quaternion.identity);
+        _sm.PlayerCharacter.AudioSource.PlayOneShot(_sm.DodgeSound);
     }
 
     public override void ExitState()

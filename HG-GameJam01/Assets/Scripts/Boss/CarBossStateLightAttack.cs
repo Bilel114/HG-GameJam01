@@ -38,6 +38,7 @@ public class CarBossStateLightAttack : CarBossStateBase
     {
         _sm.LightAttackHitBox.SetActive(false);
         _sm.Animator.Play(AnimatorHash.Boss_Move);
+        _sm.AudioSource.volume = 1;
     }
 
     public override void UpdateState()
@@ -55,6 +56,7 @@ public class CarBossStateLightAttack : CarBossStateBase
                     _attackPhase = LightAttackPhases.Aniticipation;
                     _sm.Animator.Play(AnimatorHash.Boss_Attack2Anticipation);
                     _anticipationTimer = _sm.LightAttackAnticipationDuration;
+                    _sm.AudioSource.PlayOneShot(_sm.AnticipationSound);
                 }
                 break;
 
@@ -70,6 +72,8 @@ public class CarBossStateLightAttack : CarBossStateBase
                     _sm.Animator.Play(AnimatorHash.Boss_BossAttack2Beam);
                     _endTimer = _sm.LightAttackDuration;
                     _sm.SpriteRenderer.sortingOrder = 31;
+                    _sm.AudioSource.volume = 0.3f;
+                    _sm.AudioSource.PlayOneShot(_sm.LightAttackSound);
                 }
                 break;
 

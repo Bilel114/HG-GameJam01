@@ -10,9 +10,12 @@ public class SymbolsPuzzle : MonoBehaviour
     int[] SwitchSequence = new int[] { 0, 1, 3, 0, 2, 3};
     public SpriteRenderer[] SymbolSequenceSprites = new SpriteRenderer[6];
     public Color SymbolOffColor, SymbolOnColor;
+    public AudioSource AudioSource;
+    public AudioClip WrongSymbolSound, SwitchPressedSound;
 
     private void Awake ()
     {
+        AudioSource = GetComponent<AudioSource>();
         for (int i = 0; i < Switches.Length; i++)
         {
             Switches[i].Id = i;
@@ -25,7 +28,8 @@ public class SymbolsPuzzle : MonoBehaviour
         if (switchId == SwitchSequence[CurrentSequenceIndex])
         {
             SymbolSequenceSprites[CurrentSequenceIndex++].color = SymbolOnColor;
-            // play correct sound?
+            
+            AudioSource.PlayOneShot(SwitchPressedSound);
 
             if (CurrentSequenceIndex == SwitchSequence.Length)
             {
@@ -39,14 +43,12 @@ public class SymbolsPuzzle : MonoBehaviour
             {
                 SymbolSequenceSprites[i].color = SymbolOffColor;
             }
-            // play mistake sound?
+            AudioSource.PlayOneShot(WrongSymbolSound);
         }
     }
 
     public void PuzzleWon ()
     {
-        // damage boss
-        Debug.Log("Symbols Puzzle Won!");
         IsPuzzleWon = true;
         LevelManager.TransitionToSecondFight();
     }

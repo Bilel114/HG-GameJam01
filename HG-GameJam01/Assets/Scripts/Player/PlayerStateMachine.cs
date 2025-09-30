@@ -50,10 +50,12 @@ public class PlayerStateMachine : MonoBehaviour
     [SerializeField] private GameObject _dustEffectPrefab;
     public GameObject DustEffectPrefab { get => _dustEffectPrefab; }
     public Color DodgeRechargeColor;
+    public AudioClip DodgeSound;
     
     public float ImmunityDuration = 1f;
     public float ImmunityTimer;
     public float DamageTimeCost = 20;
+    public AudioClip[] GetHitSounds;
 
     // Shield fields
     public float ShieldCreationTime = 0.16f;
@@ -61,10 +63,12 @@ public class PlayerStateMachine : MonoBehaviour
     public float ShieldCooldownTimer;
     public bool IsShieldInterrupted;
     public bool IsShieldBarrierUp;
+    public AudioClip ShieldCreationSound, ShieldPoppingSound;
 
     public RuneStone _currentRuneStone;
     public RuneOrb _currentRuneOrb;
     public int CurrentRuneStoneId = -1;
+    public AudioClip PickUpRuneSound, PlaceRuneSound, WrongRuneStoneSound;
 
     // input fields
     #region Input fields
@@ -222,7 +226,7 @@ public class PlayerStateMachine : MonoBehaviour
     {
         PlayerCharacter.LevelManager.GameTimer.DecreaseTimer(DamageTimeCost);
         PlayerCharacter.DamageEffectAnimator.SetTrigger(AnimatorHash.Player_GetHit);
-        // play sound
+        PlayerCharacter.AudioSource.PlayOneShot(GetHitSounds[Random.Range(0, GetHitSounds.Length)]);
         StartCoroutine(GetHitColorCoroutine());
         ImmunityTimer = ImmunityDuration;
     }
@@ -238,12 +242,21 @@ public class PlayerStateMachine : MonoBehaviour
     {
         if (IsInputInteractPressed)
         {
-            if (_currentRuneStone != null && !_currentRuneStone.IsRuneOn && _currentRuneStone.Id == CurrentRuneStoneId)
+            if (_currentRuneStone != null && !_currentRuneStone.IsRuneOn)
             {
-                IsInputInteractPressed = false;
-                _currentRuneStone.ActivateRuneStone();
-                CurrentRuneStoneId = -1;
-                PlayerCharacter.FollowingRuneSprite.enabled = false;
+                if (_currentRuneStone.Id == CurrentRuneStoneId)
+                {
+                    IsInputInteractPressed = false;
+                    _currentRuneStone.ActivateRuneStone();
+                    PlayerCharacter.AudioSource.PlayOneShot(PlaceRuneSound);
+                    CurrentRuneStoneId = -1;
+                    PlayerCharacter.FollowingRuneSprite.enabled = false; 
+                }
+                else
+                {
+                    IsInputInteractPressed = false;
+                    PlayerCharacter.AudioSource.PlayOneShot(WrongRuneStoneSound);
+                }
             }
             else if (_currentRuneOrb != null && !_currentRuneOrb.IsSymbolUsed)
             {
@@ -251,6 +264,7 @@ public class PlayerStateMachine : MonoBehaviour
                 CurrentRuneStoneId = _currentRuneOrb.Id;
                 PlayerCharacter.FollowingRuneSprite.enabled = true;
                 PlayerCharacter.FollowingRuneSprite.sprite = _currentRuneOrb.SpriteRenderer.sprite;
+                PlayerCharacter.AudioSource.PlayOneShot(PickUpRuneSound);
             }
         }
     }

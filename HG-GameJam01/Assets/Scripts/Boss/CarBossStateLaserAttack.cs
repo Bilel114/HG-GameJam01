@@ -76,6 +76,7 @@ public class CarBossStateLaserAttack : CarBossStateBase
                     _firingTarget = _sm.Player.transform.position;
                     _anticipationTimer = _sm.LaserAttackPauseDuration;
                     _sm.Animator.Play(AnimatorHash.Boss_Attack1Anticipation);
+                    _sm.AudioSource.PlayOneShot(_sm.AnticipationSound);
                 }
                 break;
 
